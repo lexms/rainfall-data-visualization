@@ -82,7 +82,7 @@ class simulate_curah_hujan_harian:
 
 
 class simulate_lama_hujan_harian:
-    def __init__(self):
+    def __init__(self, max, min):
         self.a = 4
         self.m = 741293
         self.z0 = 10116370
@@ -154,7 +154,9 @@ class simulate_lama_hujan_harian:
 
 
 class1 = simulate_curah_hujan_harian()
-class2 = simulate_lama_hujan_harian()
+
+
+class2 = simulate_lama_hujan_harian(max,min)
 
 class global_function:
     def __init__(self):        
@@ -342,7 +344,7 @@ class global_function:
 
 
 
-#MAIN PROGRAM
+#FUNCTION CALLING
 
 class3 = global_function()
 
@@ -351,5 +353,6 @@ class1.get_mean()
 class2.get_mean()
 class3.get_mean()
 class3.get_max_min()
+
 
 plt.show()
