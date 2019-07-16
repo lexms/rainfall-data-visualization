@@ -8,7 +8,7 @@ import numpy
 # Kelas : MOSI-8
 
 
-count_global = 20
+count_global = 28
 
 class simulate_curah_hujan_harian:
     def __init__(self):
@@ -256,6 +256,8 @@ class global_function:
             elif status == 'Hujan Sangat Lebat':  
                 self.count_hsl += 1
 
+                
+ 
             #END FOR
         
         
@@ -282,7 +284,7 @@ class global_function:
 
         plt.subplot(grid_1_plotlib_x,grid_1_1plotlib_y,1)
         plt.bar(names_status, values_status)
-        plt.xlabel('HARI')
+        plt.xlabel('')
         plt.ylabel('Jumlah Kejadian')
 
  
@@ -292,7 +294,6 @@ class global_function:
         grid_2_plotlib_y = 3
         
         #GRAPH 2.1
-        
         plt.subplot(grid_2_plotlib_y,grid_2_plotlib_x,1)
         plt.plot(_list_day_only,_list_chh_only)
         plt.xticks(rotation=90)
@@ -304,7 +305,7 @@ class global_function:
         plt.plot(_list_day_only,_list_lhh_only)
         plt.xticks(rotation=90)
         plt.xlabel('')
-        plt.ylabel('Lama Hujan jam')
+        plt.ylabel('Lama Hujan (jam)')
 
         #GRAPH 2.3
         plt.subplot(grid_2_plotlib_y,grid_2_plotlib_x,3)
@@ -313,7 +314,7 @@ class global_function:
         plt.xlabel('')
         plt.ylabel('Intentsitas Hujan (mm/jam)')
   
-
+        #FIGURE 3
 
     def get_mean(self):
         _list = self.rainfall_intensity_list()
