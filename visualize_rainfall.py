@@ -159,6 +159,11 @@ class2 = simulate_lama_hujan_harian()
 class global_function:
     def __init__(self):        
         self.count = count_global
+        self.count_hsr = 0
+        self.count_hr = 0
+        self.count_hs = 0
+        self.count_hl = 0
+        self.count_hsl = 0
    
 
     def rainfall_intensity_list(self):
@@ -185,12 +190,12 @@ class global_function:
 
     def day_name_generate(self, day_number):
         switcher = {
-            1: "Senin",
-            2: "Selasa",
-            3: "Rabu  ",
-            4: "Kamis",
-            5: "Jumat",
-            6: "Sabtu",
+            1: "Senin  ",
+            2: "Selasa ",
+            3: "Rabu   ",
+            4: "Kamis  ",
+            5: "Jumat  ",
+            6: "Sabtu  ",
             0: "Minggu"
         }
         return switcher.get(day_number,"invalid number days")
@@ -199,19 +204,18 @@ class global_function:
         _list_chh = class1.rng_list()
         _list_lhh = class2.multiplicative_list()
         _list_rainfall_intensity = self.rainfall_intensity_list()
+        
+        #declaring seperated array
         _list_all_data = []
-
-        count_hsr = 0
-        count_hr = 0
-        count_hs = 0
-        count_hl = 0
-        count_hsl = 0
-        
+        _list_rainfall_intensity_only = []
+        _list_day_only = []
+        _list_chh_only = []
+        _list_lhh_only = []
         
 
-        print('\n===Data Hujan Harian===\n')
+        print('\n================================================================Data Hujan Harian=========================================================================\n')
         print('| No.\t |  Hari\t | Ui (LCG)\t | Ui (Multipli) | Curah Hujan(mm) \t  | Lama Hujan(jam) \t  | Intensitas (mm/jam)\t | Status\t\t |')
-        print('----------------------------------------------------------------------------------------------------------------------------------------------------------------')
+        print('----------------------------------------------------------------------------------------------------------------------------------------------------------')
         for i in range(0,len(_list_chh)):
 
             day = self.day_name_generate((i+1) % 7)
@@ -231,45 +235,84 @@ class global_function:
                 rainfall_intensity,
                 status))
 
-            #_list_all_data.append({'NO':i, 'HARI':day, 'UI_CHH': ui_chh, 'UI_LHH': ui_lhh, 'CHH':chh, 'LHH':lhh, 'R_I': rainfall_intensity, 'STATUS': status})
+            _list_all_data.append({'NO':i, 'HARI':day, 'UI_CHH': ui_chh, 'UI_LHH': ui_lhh, 'CHH':chh, 'LHH':lhh, 'R_I': rainfall_intensity, 'STATUS': status})
             
-            
+            _list_chh_only.append(chh)
+            _list_lhh_only.append(lhh)
+            _list_rainfall_intensity_only.append(rainfall_intensity)
+
+
+            _custom_day = str(i+1) + '. ' + day
+            _list_day_only.append(_custom_day)
+
             if status == 'Hujan Sangat Ringan':
-                count_hsr += 1
+                self.count_hsr += 1
             elif status == 'Hujan Ringan       ':
-                count_hr += 1
+                self.count_hr += 1
             elif status == 'Hujan Sedang       ':
-                count_hs += 1
+                self.count_hs += 1
             elif status == 'Hujan Lebat        ':
-                count_hl += 1
+                self.count_hl += 1
             elif status == 'Hujan Sangat Lebat':  
-                count_hsl += 1
+                self.count_hsl += 1
 
             #END FOR
         
         
         print('============================================================================================================================================================')
-        #print(count_hsr, count_hr, count_hs, count_hl,count_hsl)
 
-        data_status = { 'Hujan Sangat Ringan': count_hsr, 
-                        'Hujan Ringan': count_hr, 
-                        'Hujan Sedang': count_hs, 
-                        'Hujan Lebat': count_hl,
-                        'Hujan Sangat Lebat': count_hsl}
 
-        names = list(data_status.keys())
-        values = list(data_status.values())
+        #PLOTTING GRAPH
 
-        gridplotlib_x = 1
-        gridplotlib_y = 2
 
-        
-        plt.bar(names, values)
-        plt.xlabel('Hari')
-        plt.ylabel('Intentsitas Hujan mm/jam')
-        plt.suptitle('Intensitas Hujan berdasarkan hari')
+        #FIGURE 1
+        plt.figure(1)
+        grid_1_plotlib_x = 1
+        grid_1_1plotlib_y = 1
+
+        #GRAPH 1.1
+        data_status = { 'Hujan\nSangat\nRingan': self.count_hsr, 
+                        'Hujan\nRingan': self.count_hr, 
+                        'Hujan\nSedang': self.count_hs, 
+                        'Hujan\nLebat': self.count_hl,
+                        'Hujan\nSangat\nLebat': self.count_hsl}
+
+        names_status = list(data_status.keys())
+        values_status = list(data_status.values())
+
+        plt.subplot(grid_1_plotlib_x,grid_1_1plotlib_y,1)
+        plt.bar(names_status, values_status)
+        plt.xlabel('HARI')
+        plt.ylabel('Jumlah Kejadian')
+
  
+        #FIGURE 2
+        plt.figure(2)
+        grid_2_plotlib_x = 1
+        grid_2_plotlib_y = 3
+        
+        #GRAPH 2.1
+        
+        plt.subplot(grid_2_plotlib_y,grid_2_plotlib_x,1)
+        plt.plot(_list_day_only,_list_chh_only)
+        plt.xticks(rotation=90)
+        plt.xlabel('')
+        plt.ylabel('Curah Hujan (mm)')
 
+        #GRAPH 2.2
+        plt.subplot(grid_2_plotlib_y,grid_2_plotlib_x,2)
+        plt.plot(_list_day_only,_list_lhh_only)
+        plt.xticks(rotation=90)
+        plt.xlabel('')
+        plt.ylabel('Lama Hujan jam')
+
+        #GRAPH 2.3
+        plt.subplot(grid_2_plotlib_y,grid_2_plotlib_x,3)
+        plt.plot(_list_day_only,_list_rainfall_intensity_only)
+        plt.xticks(rotation=90)
+        plt.xlabel('')
+        plt.ylabel('Intentsitas Hujan (mm/jam)')
+  
 
 
     def get_mean(self):
@@ -298,6 +341,7 @@ class global_function:
 
 
 
+#MAIN PROGRAM
 
 class3 = global_function()
 
